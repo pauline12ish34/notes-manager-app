@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:note_system/screens/auth/signup_screen.dart';
-import 'package:note_system/screens/home_screen.dart';
-// Make sure this file exists
+import 'package:note_system/screens/notes_screen.dart';
+
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
+        MaterialPageRoute(builder: (_) => const NotesScreen()),
       );
     } on FirebaseAuthException catch (e) {
       setState(() {
