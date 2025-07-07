@@ -1,0 +1,5 @@
+[info] Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check (C:\Users\user\Documents\flutter\note_system\lib\screens\auth\login_screen.dart:35:28)
+[info] Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check (C:\Users\user\Documents\flutter\note_system\lib\screens\auth\login_screen.dart:40:9)
+[info] Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check (C:\Users\user\Documents\flutter\note_system\lib\screens\auth\signup_screen.dart:33:30)
+[info] Don't use 'BuildContext's across async gaps, guarded by an unrelated 'mounted' check (C:\Users\user\Documents\flutter\note_system\lib\screens\auth\signup_screen.dart:38:40)
+[info] Don't use 'BuildContext's across async gaps (C:\Users\user\Documents\flutter\note_system\lib\screens\home_screen.dart:19:46)
