@@ -10,13 +10,13 @@ class NotesRepository {
 
   Future<void> _checkConnection() async {
     try {
-      // Test basic Firestore operation
+      // I want to test connection as getting data in firestore was failing
       await _firestore.collection('connection_test').doc('ping').set({
         'timestamp': FieldValue.serverTimestamp(),
       });
-      debugPrint('✅ Firestore connection test successful');
+      debugPrint('Firestore connection test successful');
     } catch (e) {
-      debugPrint('❌ Firestore connection test failed: $e');
+      debugPrint(' Firestore connection test failed: $e');
       rethrow;
     }
   }
@@ -24,7 +24,7 @@ class NotesRepository {
   Future<List<Note>> fetchNotes(String userId) async {
     try {
       await _checkConnection();
-      debugPrint('📥 Fetching notes for user: $userId');
+      debugPrint('Fetching notes for user: $userId');
       
       final snapshot = await _firestore
           .collection('users')
@@ -33,13 +33,13 @@ class NotesRepository {
           .orderBy('createdAt', descending: true)
           .get();
 
-      debugPrint('📥 Retrieved ${snapshot.docs.length} notes');
+      debugPrint(' Retrieved ${snapshot.docs.length} notes');
       return snapshot.docs.map((doc) => Note.fromMap({
             'id': doc.id,
             ...doc.data(),
           })).toList();
     } catch (e) {
-      debugPrint('❌ Error fetching notes: $e');
+      debugPrint(' Error fetching notes: $e');
       rethrow;
     }
   }
@@ -47,8 +47,8 @@ class NotesRepository {
   Future<void> addNote(String userId, String text) async {
     try {
       await _checkConnection();
-      debugPrint('➕ Adding note for user: $userId');
-      debugPrint('📝 Note content: $text');
+      debugPrint('Adding note for user: $userId');
+      debugPrint('Note content: $text');
 
       final docRef = await _firestore
           .collection('users')
@@ -56,12 +56,12 @@ class NotesRepository {
           .collection('notes')
           .add({
             'text': text,
-            'createdAt': FieldValue.serverTimestamp(), // Use server timestamp
+            'createdAt': FieldValue.serverTimestamp(), // Using server timestamp
           });
 
-      debugPrint('✅ Note added successfully with ID: ${docRef.id}');
+      debugPrint('Note added successfully with ID: ${docRef.id}');
     } catch (e, stack) {
-      debugPrint('''❌ CRITICAL ERROR ADDING NOTE:
+      debugPrint(''' CRITICAL ERROR ADDING NOTE:
       Error: $e
       Stack: $stack
       UserID: $userId
@@ -73,7 +73,7 @@ class NotesRepository {
   Future<void> updateNote(String userId, String noteId, String text) async {
     try {
       await _checkConnection();
-      debugPrint('✏️ Updating note $noteId for user $userId');
+      debugPrint(' Updating note $noteId for user $userId');
       
       await _firestore
           .collection('users')
@@ -85,9 +85,9 @@ class NotesRepository {
             'updatedAt': FieldValue.serverTimestamp(),
           });
       
-      debugPrint('✅ Note updated successfully');
+      debugPrint(' Note updated successfully');
     } catch (e) {
-      debugPrint('❌ Error updating note: $e');
+      debugPrint('Error updating note: $e');
       rethrow;
     }
   }
@@ -95,7 +95,7 @@ class NotesRepository {
   Future<void> deleteNote(String userId, String noteId) async {
     try {
       await _checkConnection();
-      debugPrint('🗑️ Deleting note $noteId for user $userId');
+      debugPrint('Deleting note $noteId for user $userId');
       
       await _firestore
           .collection('users')
@@ -104,9 +104,9 @@ class NotesRepository {
           .doc(noteId)
           .delete();
       
-      debugPrint('✅ Note deleted successfully');
+      debugPrint(' Note deleted successfully');
     } catch (e) {
-      debugPrint('❌ Error deleting note: $e');
+      debugPrint(' Error deleting note: $e');
       rethrow;
     }
   }

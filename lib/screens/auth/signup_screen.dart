@@ -29,7 +29,7 @@ class _SignupScreenState extends State<SignupScreen> {
       );
 
       // Show success message
-      if (context.mounted) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Account created! Please log in.')),
         );
