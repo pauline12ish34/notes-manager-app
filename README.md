@@ -6,7 +6,7 @@
 
 ## Features
 - Firebase Authentication (Email/Password)
-- Cloud Firestore CRUD operations
+- Cloud Firestore CRUD operations on notes
 - Clean Architecture with Provider state management
 
 ## Build Steps
@@ -21,3 +21,6 @@
 flutter pub get
 flutterfire configure
 
+### to launch notes App (launch emulator)
+
+flutter run --release
