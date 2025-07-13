@@ -16,6 +16,13 @@
 - Firebase account
 - Android Studio/Xcode (for platform builds)
 
+### Installation
+```bash
+flutter pub get
+flutterfire configure
+
+
+
 ##Screenshots(Potrait& Landscape)
 
   #Potrait
@@ -28,11 +35,6 @@
 
 
 
-
-### Installation
-```bash
-flutter pub get
-flutterfire configure
 
 
 
