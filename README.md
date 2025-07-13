@@ -20,7 +20,7 @@
 ```bash
 flutter pub get
 flutterfire configure
-
+```
 
 
 ##Screenshots(Potrait& Landscape)
