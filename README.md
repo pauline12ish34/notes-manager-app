@@ -20,6 +20,27 @@
 ```bash
 flutter pub get
 flutterfire configure
+```
+
+
+##Screenshots(Potrait& Landscape)
+
+  #Potrait
+  
+  <img width="310" height="735" alt="potraitnotes" src="https://github.com/user-attachments/assets/4455d0ce-3fd5-4054-b360-49c3923e2e45" />
+  
+  #Landscape
+  
+  <img width="705" height="332" alt="image" src="https://github.com/user-attachments/assets/d945bd61-320f-4f29-95a5-9262d9bec13d" />
+
+
+
+
+
+
+
+
+
 
 ### to launch notes App (launch emulator)
 
