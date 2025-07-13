@@ -20,4 +20,7 @@
 ```bash
 flutter pub get
 flutterfire configure
+### potrait vieww
+<img width="310" height="735" alt="image" src="https://github.com/user-attachments/assets/ef002f9d-9eeb-409a-9026-90a72bc8107a" />
+
 
