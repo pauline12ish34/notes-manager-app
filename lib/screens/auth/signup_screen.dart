@@ -1,59 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:provider/provider.dart';
+import 'package:note_system/providers/authentication_provider.dart';
+import 'package:note_system/screens/auth/login_screen.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+class SignupScreen extends StatelessWidget {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  static const String routeName = '/signup';
 
-  @override
-  State<SignupScreen> createState() => _SignupScreenState();
-}
-
-class _SignupScreenState extends State<SignupScreen> {
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _formKey = GlobalKey<FormState>();
-
-  bool _isLoading = false;
-  String? _errorMessage;
-
-  Future<void> _signup() async {
-    setState(() {
-      _isLoading = true;
-      _errorMessage = null;
-    });
-
-    try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: _emailController.text.trim(),
-        password: _passwordController.text.trim(),
-      );
-
-      // Showing success message
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Account created! Please log in.')),
-        );
-
-        // Navigating to login screen
-        Navigator.pushReplacementNamed(context, '/login');
-      }
-    } on FirebaseAuthException catch (e) {
-      setState(() {
-        _errorMessage = e.message;
-      });
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+  SignupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -63,45 +17,101 @@ class _SignupScreenState extends State<SignupScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              TextFormField(
-                controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
-                validator: (value) =>
-                    value == null || !value.contains('@') ? 'Enter a valid email' : null,
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _passwordController,
-                decoration: const InputDecoration(labelText: 'Password'),
-                obscureText: true,
-                validator: (value) =>
-                    value != null && value.length < 6 ? 'Min 6 characters' : null,
-              ),
-              const SizedBox(height: 20),
-              if (_errorMessage != null)
-                Text(_errorMessage!, style: const TextStyle(color: Colors.red)),
-              const SizedBox(height: 10),
-              _isLoading
-                  ? const CircularProgressIndicator()
-                  : ElevatedButton(
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          _signup();
-                        }
-                      },
-                      child: const Text('Sign Up'),
+          child: Consumer<AuthenticationProvider>(
+            builder: (context, authProvider, _) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextFormField(
+                    controller: authProvider.emailController,
+                    decoration: const InputDecoration(labelText: 'Email'),
+                    validator: (value) {
+                      if (value == null || value.isEmpty)
+                        return 'Please enter email';
+                      if (!value.contains('@')) return 'Enter valid email';
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: authProvider.passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          authProvider.obscurePassword
+                              ? Icons.visibility_off
+                              : Icons.visibility,
+                        ),
+                        onPressed: authProvider.togglePasswordVisibility,
+                      ),
                     ),
-              const SizedBox(height: 10),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/login');
-                },
-                child: const Text("Already have an account? Login"),
-              ),
-            ],
+                    obscureText: authProvider.obscurePassword,
+                    validator: (value) {
+                      if (value == null || value.isEmpty)
+                        return 'Please enter password';
+                      if (value.length < 6)
+                        return 'Password must be at least 6 characters';
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  if (authProvider.errorMessage != null)
+                    Text(
+                      authProvider.errorMessage!,
+                      style: const TextStyle(color: Colors.red),
+                    ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: authProvider.isLoading
+                        ? null
+                        : () async {
+                            if (_formKey.currentState!.validate()) {
+                              final success = await authProvider.signUp();
+                              if (success && context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Account created successfully!',
+                                    ),
+                                  ),
+                                );
+                                Navigator.pushReplacementNamed(
+                                  context,
+                                  LoginScreen.routeName,
+                                );
+                              }
+                            }
+                          },
+                    child: authProvider.isLoading
+                        ? const CircularProgressIndicator()
+                        : const Text('Sign Up'),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      authProvider.clearAll();
+                      Navigator.pushNamed(context, LoginScreen.routeName);
+                    },
+                    child: RichText(
+                      text: TextSpan(
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        children: [
+                          const TextSpan(text: "Arleady have an account? "),
+                          TextSpan(
+                            text: 'Login',
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontWeight: FontWeight.bold,
+                              decoration: TextDecoration.underline,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
           ),
         ),
       ),

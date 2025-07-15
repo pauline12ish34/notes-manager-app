@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:note_system/screens/auth/login_screen.dart';
+import 'package:note_system/screens/auth/signup_screen.dart';
 import 'package:note_system/screens/notes_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:note_system/providers/notes_provider.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         routes: {
           '/login': (context) => LoginScreen(),
           '/notes': (context) =>  NotesScreen(),
+          '/signup': (context) =>  SignupScreen(),
         },
         onUnknownRoute: (settings) => MaterialPageRoute(
           builder: (context) =>  LoginScreen(),
